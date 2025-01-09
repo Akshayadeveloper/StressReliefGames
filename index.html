@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playful Games with Heart Flow</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+   <!-- font links -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
+    <style>
+        /* Body and Background */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #ffccf9, #c2e9fb);
+        }
+
+        /* Floating Hearts Animation */
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff69b4;
+            transform: rotate(-45deg);
+            animation: flow 10s linear infinite;
+            opacity: 0;
+        }
+
+        .heart::before, .heart::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff69b4;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: 10px;
+            top: 0;
+        }
+
+        @keyframes flow {
+            0% {
+                transform: translate(0, 100vh) rotate(-45deg) scale(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(var(--x) * 100vw), -100px) rotate(calc(var(--r) * 360deg)) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Header Style */
+        h1 {
+            color: #ff8cda;
+            font-size: 2.5em;
+            text-align: center;
+            margin-top: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+         /* Para Style */
+        p{
+            color: #ff8cda;
+            font-size: 1em;
+            text-align: center;
+            margin-top: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Game Container */
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            padding: 20px;
+           font-size:0.9rem;
+        }
+        /* Game Card Style - Nothing Phone Widget */
+        .game-card {
+            position: relative;
+            padding: 20px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .game-card p {
+            color: #fff;
+            font-size: 1.2em;
+            margin: 0;
+        }
+
+        /* Donate Section */
+        .donate-section {
+            margin-top: 50px;
+            font-size: 1.2em;
+            background: #ffedff;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .donate-section h3 {
+            margin-bottom: 20px;
+            color: #ff6fb5;
+            font-size: 1.8em;
+        }
+
+        .crypto-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .crypto-button {
+            padding: 12px 25px;
+            background-color: #ff8cda;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .crypto-button:hover {
+            background-color: #ff6fb5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Hearts Animation -->
+    <script>
+        const numHearts = 50;
+        const body = document.body;
+
+        for (let i = 0; i < numHearts; i++) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+
+            const randomX = Math.random();
+            const randomDelay = Math.random() * 5;
+            const randomRotation = Math.random();
+            heart.style.setProperty('--x', randomX);
+            heart.style.setProperty('--r', randomRotation);
+            heart.style.animationDelay = `${randomDelay}s`;
+            heart.style.animationDuration = `${10 + randomDelay}s`;
+
+            body.appendChild(heart);
+        }
+    </script>
+
+    <!-- Header -->
+    <h1>Welcome to Playful Games!</h1>
+
+    <!-- Game Cards Container -->
+    <div class="game-container">
+        <div class="game-card" onclick="alert('Concentration Game')">
+            <p>Concentration Game</p>
+        </div>
+        <div class="game-card" onclick="alert('Balloon Pop Game')">
+            <p>Balloon Pop Game</p>
+        </div>
+        <div class="game-card" onclick="alert('Math Brainstorm')">
+            <p>Math Brainstorm</p>
+        </div>
+        <div class="game-card" onclick="alert('Color Mixing')">
+            <p>Color Mixing</p>
+        </div>
+        <div class="game-card" onclick="alert('Bubble Pop Game')">
+            <p>Bubble Pop Game</p>
+        </div>
+    </div>
+
+    <!-- Donate Section -->
+    <div class="donate-section">
+        <h3>Enjoying the Games? Donate with Cryptocurrency!</h3>
+        <div class="crypto-buttons">
+            <button class="crypto-button">Trust Wallet</button>
+            <button class="crypto-button">Binance</button>
+            <button class="crypto-button">FaucetPay</button>
+            <button class="crypto-button">CWallet</button>
+            <button class="crypto-button">TON Wallet</button>
+        </div>
+      <!-- Footer -->
+      <footer class="text-center">
+        <p>&copy; 2025 Akshayaselvakumar. <a href="https://github.com/Akshayadeveloper"><i class="fab fa-github"></i></a> All Rights Reserved.</p>
+    </footer>
+    </div>
+</body>
+</html>
