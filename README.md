@@ -1,2 +1,2 @@
 # StressReliefGames
-http://stressreliefgames.akshayaselvakumar.com/Stress Releif Playful Games.html
+http://stressreliefgames.akshayaselvakumar.com/StressReliefGames
