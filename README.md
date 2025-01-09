@@ -1,2 +1,2 @@
 # StressReliefGames
-http://stressreliefgames.akshayaselvakumar.com/StressReliefGames
+http://stressreliefgames.akshayaselvakumar.com/
