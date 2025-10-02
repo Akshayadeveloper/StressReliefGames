@@ -3,215 +3,1115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Playful Games with Heart Flow</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-   <!-- font links -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
+    <title>The Love Arcade - Premium Mini Games</title>
+    <!-- Fonts: Fredoka for friendly titles, Inter for professional body text -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
-        /* Body and Background */
+        /* BASE STYLES & ELEGANT PALETTE */
+        :root {
+            --color-primary: #d87383; /* Refined Rose Accent */
+            --color-secondary: #f0f0f5; /* Light Gray/Blue for depth */
+            --color-bg: #f7f9fc; /* Elegant Off-White Background */
+            --color-text: #4a4a4a;
+            --radius-main: 25px;
+            --radius-sm: 12px;
+            --font-title: 'Fredoka', cursive;
+            --font-body: 'Inter', sans-serif;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: var(--font-body);
             margin: 0;
             padding: 0;
+            min-height: 100vh;
             overflow-x: hidden;
-            background: linear-gradient(135deg, #ffccf9, #c2e9fb);
+            background-color: var(--color-bg);
         }
 
-        /* Floating Hearts Animation */
-        .heart {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #ff69b4;
-            transform: rotate(-45deg);
-            animation: flow 10s linear infinite;
-            opacity: 0;
+        .main-content {
+            width: 95%; 
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0;
+            position: relative; /* To ensure it sits above the fixed heart flow */
+            z-index: 20; 
         }
 
-        .heart::before, .heart::after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #ff69b4;
-            border-radius: 50%;
-        }
-
-        .heart::before {
-            top: -10px;
-            left: 0;
-        }
-
-        .heart::after {
-            left: 10px;
+        /* --- HEART FLOW ANIMATION STYLES (FIXED) --- */
+        #heart-flow-container {
+            position: fixed;
             top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Crucial: allows clicks on content underneath */
+            overflow: hidden;
+            z-index: 10; /* Below all main content, above background */
+        }
+        
+        @keyframes heart-ascend {
+            0% { 
+                /* Start at the bottom (translateY 0, relative to position: bottom: 0) */
+                transform: translate(0, 0) scale(0.5); 
+                opacity: 0; 
+            }
+            50% { 
+                /* Drift horizontally and move halfway up */
+                transform: translate(var(--x-drift), -50vh) scale(1);
+                opacity: 0.8;
+            }
+            100% { 
+                /* Drift more and move off the top of the screen */
+                transform: translate(calc(var(--x-drift) * 2), -110vh) scale(0.5); 
+                opacity: 0; 
+            }
         }
 
-        @keyframes flow {
-            0% {
-                transform: translate(0, 100vh) rotate(-45deg) scale(0);
-                opacity: 0;
-            }
-            20% {
-                opacity: 1;
-            }
-            80% {
-                opacity: 1;
-            }
-            100% {
-                transform: translate(calc(var(--x) * 100vw), -100px) rotate(calc(var(--r) * 360deg)) scale(1);
-                opacity: 0;
-            }
+        .floating-heart {
+            position: absolute;
+            bottom: 0; /* Ensures all hearts start just at the bottom edge */
+            font-size: var(--heart-size); 
+            color: var(--heart-color); 
+            animation: heart-ascend var(--duration) linear forwards;
+            filter: drop-shadow(0 0 1px rgba(0,0,0,0.1));
+            z-index: 10;
         }
-
-        /* Header Style */
+        
+        /* --- TYPOGRAPHY --- */
         h1 {
-            color: #ff8cda;
-            font-size: 2.5em;
+            color: var(--color-primary); 
+            font-size: clamp(2.5em, 8vw, 4em);
             text-align: center;
-            margin-top: 20px;
-            font-family: 'Poppins', sans-serif;
+            margin: 40px 0 10px;
+            font-family: var(--font-title);
+            text-shadow: 2px 2px 0px #ffffff, 4px 4px 0px rgba(216, 115, 131, 0.2);
+            font-weight: 700;
         }
-         /* Para Style */
-        p{
-            color: #ff8cda;
-            font-size: 1em;
-            text-align: center;
-            margin-top: 20px;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        /* Game Container */
+        
+        /* --- GAME CARD NAVIGATION (Tabs) --- */
         .game-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 20px;
-            padding: 20px;
-           font-size:0.9rem;
+            margin-bottom: 40px;
         }
-        /* Game Card Style - Nothing Phone Widget */
         .game-card {
-            position: relative;
-            padding: 20px;
-            border-radius: 30px;
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
+            padding: 20px 10px;
+            border-radius: var(--radius-sm);
+            background-color: #ffffff;
+            border: 2px solid var(--color-secondary); 
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 120px;
             cursor: pointer;
+        }
+        .game-card.active-card {
+            background: linear-gradient(135deg, #fff7f7, #ffe9ec);
+            transform: scale(1.03);
+            border: 3px solid var(--color-primary); 
+            box-shadow: 0 0 0 4px #ffe4e8, 0 10px 20px rgba(0, 0, 0, 0.15); 
+        }
+
+        /* --- MAIN GAME AREA --- */
+        #game-area {
+            background: #ffffff;
+            border-radius: var(--radius-main);
+            padding: clamp(25px, 5vw, 50px);
+            min-height: 450px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--color-secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        /* --- Level Select Buttons --- */
+        .level-select { margin-bottom: 20px; }
+        .level-select button {
+            background-color: #f5f5f5;
+            color: var(--color-text);
+            border: 1px solid #ccc;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            transition: all 0.2s;
+        }
+        .level-select button.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- GAME ARENA STYLES --- */
+        #balloon-area, #bubble-pop-arena {
+            width: 100%;
+            max-width: 600px;
+            height: clamp(300px, 60vh, 450px);
+            background: var(--color-secondary);
+            border-radius: var(--radius-sm);
+            margin: 15px 0;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #c0c0c0;
+        }
+        
+        /* === HEART MATCH MEMORY GAME STYLES === */
+        #memory-game-board {
+            display: grid;
+            gap: 10px;
+            padding: 10px;
+            background: #fff;
+            border-radius: var(--radius-sm);
+            width: fit-content;
+            margin: 20px auto;
+        }
+        .card {
+            width: clamp(60px, 15vw, 80px); 
+            height: clamp(60px, 15vw, 80px);
+            border-radius: 12px;
+            cursor: pointer;
+            perspective: 1000px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease;
         }
-
-        .game-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .game-card p {
-            color: #fff;
-            font-size: 1.2em;
-            margin: 0;
-        }
-
-        /* Donate Section */
-        .donate-section {
-            margin-top: 50px;
-            font-size: 1.2em;
-            background: #ffedff;
-            padding: 20px;
-            border-radius: 15px;
+        .card-inner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
         }
-
-        .donate-section h3 {
-            margin-bottom: 20px;
-            color: #ff6fb5;
-            font-size: 1.8em;
+        .card.flipped .card-inner, .card.matched .card-inner {
+            transform: rotateY(180deg);
         }
-
-        .crypto-buttons {
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
             display: flex;
-            gap: 10px;
             justify-content: center;
-            flex-wrap: wrap;
+            align-items: center;
+            font-size: clamp(1.5em, 5vw, 2em); 
+            border-radius: 12px;
         }
-
-        .crypto-button {
-            padding: 12px 25px;
-            background-color: #ff8cda;
+        .card-back {
+            background-color: var(--color-primary);
             color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+        }
+        .card-front {
+            background-color: #ffe4e8;
+            color: var(--color-primary);
+            transform: rotateY(180deg);
+            border: 2px solid var(--color-primary);
+        }
+        /* === END HEART MATCH STYLES === */
+
+
+        /* === BALLOON POP GAME STYLES (Fixed) === */
+        @keyframes ascend {
+            0% { transform: translateY(0) scale(0.8); opacity: 0.8; }
+            100% { transform: translateY(-120vh) scale(1.1); opacity: 1; } 
         }
 
-        .crypto-button:hover {
-            background-color: #ff6fb5;
+        .balloon {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            width: var(--size);
+            height: var(--size);
+            background: radial-gradient(circle at 70% 30%, #fff, #ffafc0 60%, #d87383 100%); 
+            box-shadow: 
+                0 5px 15px rgba(0, 0, 0, 0.3),
+                inset -5px -5px 10px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s, transform 0.3s;
+            
+            /* Start the balloon just below the visible area */
+            bottom: -50px; 
+            
+            animation: ascend var(--duration) linear forwards; 
         }
+        
+        /* Balloon Knot/Tie */
+        .balloon::before {
+            content: '';
+            position: absolute;
+            bottom: -8px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 8px solid var(--color-primary); 
+            z-index: 10;
+        }
+        
+        /* Balloon String/Tail */
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -150px; 
+            left: 50%;
+            width: 1px;
+            height: 150px;
+            background-color: #888; 
+            z-index: 5;
+        }
+
+        .balloon.popped {
+            opacity: 0;
+            transform: scale(0.1);
+        }
+        
+        /* Confetti Styles */
+        @keyframes fall {
+            0% { transform: translate(var(--x-start), var(--y-start)) rotate(0deg); opacity: 1; }
+            100% { transform: translate(var(--x-end), var(--y-end)) rotate(720deg); opacity: 0; }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: var(--confetti-color);
+            border-radius: 2px;
+            animation: fall var(--confetti-duration) ease-out forwards;
+            z-index: 99;
+        }
+        /* === END BALLOON POP GAME STYLES === */
+
+
+        /* --- FLOWING BUBBLE VISUALS (Bubble Pop Game) --- */
+        @keyframes flow-up {
+            0% { transform: translate(var(--start-x), 100%) scale(0.8); opacity: 0.8; }
+            50% { transform: translate(var(--mid-x), 50%) scale(1.1); opacity: 1; }
+            100% { transform: translate(var(--end-x), -100%) scale(0.9); opacity: 0; }
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.1); 
+            box-shadow: 
+                inset 0 0 10px rgba(255, 255, 255, 0.8), 
+                0 0 5px rgba(0, 255, 255, 0.5), 
+                0 0 10px rgba(255, 0, 255, 0.5); 
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            transition: transform 0.1s;
+            animation: flow-up var(--duration) linear forwards;
+        }
+        
+        /* --- GAME CONTROLS & BUTTONS --- */
+        .game-controls button, .crypto-button, .message-box button {
+            background: linear-gradient(90deg, var(--color-primary), #ff99a9);
+            color: white;
+            padding: 10px 22px;
+            border-radius: 25px;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+            white-space: nowrap; /* Ensures buttons don't break in the middle */
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s;
+        }
+        .crypto-button:hover, .game-controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+         /* --- Modal/Message Box Styles --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .message-box {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: var(--radius-main);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 350px;
+            text-align: center;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.3s ease-out;
+            font-family: var(--font-body);
+            z-index: 1001;
+        }
+
+        .message-box.show {
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        .message-box h3 {
+            font-family: var(--font-title);
+            color: var(--color-primary);
+        }
+
     </style>
 </head>
-<body>
+<body onload="startHeartFlowAnimation(); startGame('Heart Match Memory Game')">
 
-    <!-- Floating Hearts Animation -->
+    <!-- Heart Flow Container (NEW BACKGROUND ANIMATION) -->
+    <div id="heart-flow-container"></div>
+
+    <!-- Custom Message Box Modal -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div id="message-box" class="message-box">
+            <h3 id="modal-title"></h3>
+            <p id="modal-message"></p>
+            <button onclick="closeMessageBox()">OK</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <!-- Header -->
+        <h1>The Love Arcade</h1>
+        <p class="subtitle" style="text-align: center; color: var(--color-text);">Experience high-quality, fast-loading mini-games designed for high traffic and excellent performance.</p>
+
+        <!-- Game Cards Container (The Navigation/Tabs) -->
+        <div id="game-nav" class="game-container">
+            <div class="game-card" data-game="Heart Match Memory Game" onclick="startGame('Heart Match Memory Game', this)">
+                <span class="icon" style="color:var(--color-primary); font-size: 2em;"><i class="fas fa-heart"></i></span>
+                <p>Heart Match</p>
+            </div>
+            <div class="game-card" data-game="Balloon Pop Game" onclick="startGame('Balloon Pop Game', this)">
+                <span class="icon" style="color:var(--color-primary); font-size: 2em;"><i class="fas fa-balloon"></i></span>
+                <p>Cloud Balloon Pop</p>
+            </div>
+            <div class="game-card" data-game="Math Brainstorm" onclick="startGame('Math Brainstorm', this)">
+                <span class="icon" style="color:var(--color-primary); font-size: 2em;"><i class="fas fa-calculator"></i></span>
+                <p>Math Sparkle</p>
+            </div>
+            <div class="game-card" data-game="Color Mixing" onclick="startGame('Color Mixing', this)">
+                <span class="icon" style="color:var(--color-primary); font-size: 2em;"><i class="fas fa-palette"></i></span>
+                <p>Candy Color Mixer</p>
+            </div>
+            <div class="game-card" data-game="Bubble Pop Game" onclick="startGame('Bubble Pop Game', this)">
+                <span class="icon" style="color:var(--color-primary); font-size: 2em;"><i class="fas fa-soap"></i></span>
+                <p>Jelly Bubble Pop</p>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div id="game-area">
+            <h2 style="color:var(--color-primary); font-family:var(--font-title);">Loading Game...</h2>
+        </div>
+
+        <!-- Donate/Support Section -->
+        <div class="donate-section" style="margin-top: 40px; padding: 20px 0; text-align: center;">
+            <h3 style="font-family: var(--font-title); color: var(--color-primary); font-size: 1.8em;">Support the Arcade</h3>
+            <p style="color:var(--color-text);">Your contributions help us keep the games fast and the experience elegant. **Thank you for running this site free!**</p>
+            <div class="crypto-buttons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px;">
+                <button class="crypto-button" onclick="handleSupportAction('PayPal', 'https://paypal.me/yourusername')"><i class="fab fa-paypal"></i> PayPal</button>
+                <button class="crypto-button" onclick="handleSupportAction('Google Pay (GPay)', 'GPay UPI ID or Phone Number')"><i class="fas fa-mobile-alt"></i> GPay</button>
+                <button class="crypto-button" onclick="handleSupportAction('Binance', 'Your Binance Pay ID or Address')"><i class="fas fa-coins"></i> Binance</button>
+                <button class="crypto-button" onclick="handleSupportAction('Trust Wallet', 'Your Trust Wallet Address')"><i class="fas fa-wallet"></i> Trust Wallet</button>
+                <button class="crypto-button" onclick="handleSupportAction('Buy Me a Coffee', 'https://buymeacoff.ee/yourpage')"><i class="fas fa-mug-hot"></i> Buy Me a Coffee</button>
+                <button class="crypto-button" onclick="handleSupportAction('Ko-fi', 'https://ko-fi.com/yourpage')"><i class="fas fa-coffee"></i> Ko-fi</button>
+                <button class="crypto-button" onclick="handleSupportAction('Patreon', 'https://patreon.com/yourpage')"><i class="fab fa-patreon"></i> Patreon</button>
+            </div>
+        </div>
+
+        <!-- Footer (UPDATED with Social Links) -->
+        <footer style="margin-top: 50px; padding: 20px 0; border-top: 1px solid var(--color-secondary);">
+            <!-- Social Media Links -->
+            <div style="display: flex; justify-content: center; gap: clamp(15px, 5vw, 30px); margin-bottom: 15px;">
+                <a href="https://instagram.com/yourusername" target="_blank" style="color: var(--color-primary); font-size: 1.8em;" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://twitter.com/yourusername" target="_blank" style="color: var(--color-primary); font-size: 1.8em;" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="https://linkedin.com/in/yourusername" target="_blank" style="color: var(--color-primary); font-size: 1.8em;" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="https://youtube.com/yourchannel" target="_blank" style="color: var(--color-primary); font-size: 1.8em;" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://voryx.com" target="_blank" style="color: var(--color-primary); font-size: 1.8em; text-decoration: none; display: flex; align-items: center; gap: 5px; font-size: 1.2em; font-weight: 600;" aria-label="VORYX Website">
+                    <i class="fas fa-globe"></i> VORYX
+                </a>
+            </div>
+            <p style="color: #999; font-size: 0.9em; text-align: center;">&copy; 2025 Akshayaselvakumar. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+
     <script>
-        const numHearts = 50;
-        const body = document.body;
+        // --- Game Configurations and State ---
+        const HEART_ICONS = ['💖', '💞', '💓', '💗', '💕', '💘', '🧡', '💛', '🌟', '🌈'];
+        
+        // --- HEART FLOW ANIMATION LOGIC (FIXED) ---
+        const HEART_FLOW_COLORS = ['#ff6f69', '#d87383', '#ff99a9', '#f06292', '#e57373'];
+        const HEART_SYMBOLS = ['💖', '💕', '✨']; 
 
-        for (let i = 0; i < numHearts; i++) {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
+        function startHeartFlowAnimation() {
+            const container = document.getElementById('heart-flow-container');
+            if (!container) return;
 
-            const randomX = Math.random();
-            const randomDelay = Math.random() * 5;
-            const randomRotation = Math.random();
-            heart.style.setProperty('--x', randomX);
-            heart.style.setProperty('--r', randomRotation);
-            heart.style.animationDelay = `${randomDelay}s`;
-            heart.style.animationDuration = `${10 + randomDelay}s`;
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
 
-            body.appendChild(heart);
+                // Random icon
+                heart.innerHTML = HEART_SYMBOLS[Math.floor(Math.random() * HEART_SYMBOLS.length)];
+
+                // Randomize appearance and speed
+                const size = Math.random() * 20 + 15; // 15px to 35px
+                const duration = Math.random() * 8 + 12; // 12s to 20s
+                const startX = Math.random() * 100; // 0vw to 100vw
+                const drift = Math.random() * 80 - 40; // -40px to +40px horizontal drift
+
+                // FIX: Set the initial horizontal position using 'left'
+                heart.style.left = `${startX}vw`;
+
+                heart.style.setProperty('--heart-size', `${size}px`);
+                heart.style.setProperty('--duration', `${duration}s`);
+                heart.style.setProperty('--x-drift', `${drift}px`);
+                
+                // Random color from the defined palette
+                const color = HEART_FLOW_COLORS[Math.floor(Math.random() * HEART_FLOW_COLORS.length)];
+                heart.style.setProperty('--heart-color', color);
+
+                container.appendChild(heart);
+
+                // Remove heart after animation ends to prevent memory leak
+                heart.addEventListener('animationend', () => {
+                    heart.remove();
+                });
+            }
+
+            // Start continuous heart generation (spawn a new heart every 300ms to 600ms)
+            // We use currentGameIntervals for general background loops too.
+            currentGameIntervals.push(setInterval(createHeart, 450 + Math.random() * 150)); 
+            
+            // Generate a few hearts immediately for a better start look
+            for(let i = 0; i < 5; i++) {
+                setTimeout(createHeart, i * 200);
+            }
         }
+        
+        // --- END HEART FLOW ANIMATION LOGIC ---
+
+        const GAME_LEVELS = {
+            'Heart Match Memory Game': [
+                { name: "Beginner (6 Cards)", size: 6, cols: 2, iconSet: HEART_ICONS.slice(0, 3) }, 
+                { name: "Easy (12 Cards)", size: 12, cols: 4, iconSet: HEART_ICONS.slice(0, 6) }, 
+                { name: "Medium (16 Cards)", size: 16, cols: 4, iconSet: HEART_ICONS.slice(0, 8) }, 
+                { name: "Hard (20 Cards)", size: 20, cols: 5, iconSet: HEART_ICONS.slice(0, 10) },
+            ],
+            'Balloon Pop Game': [
+                { name: "Gentle", time: 40, interval: 600, duration: 8 },
+                { name: "Breezy", time: 30, interval: 450, duration: 7 },
+                { name: "Windy", time: 25, interval: 300, duration: 6 },
+                { name: "Storm", time: 20, interval: 200, duration: 5 },
+            ],
+            'Bubble Pop Game': [
+                { name: "Slow Flow", time: 25, interval: 600, duration: 6 },
+                { name: "Regular", time: 20, interval: 450, duration: 5 },
+                { name: "Fast Paced", time: 15, interval: 350, duration: 4 },
+                { name: "Frenzy", time: 10, interval: 250, duration: 3 },
+            ]
+        };
+
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const gameArea = document.getElementById('game-area');
+        let currentGameIntervals = [];
+        let activeGameName = '';
+
+
+        // --- Utility Functions ---
+
+        const CONFETTI_COLORS = ['#ff6f69', '#ffcc5c', '#88d8b0', '#69e3ff', '#d673ff'];
+
+        /**
+         * Creates a burst of confetti at a specific position.
+         * @param {HTMLElement} originElement The element to burst from (e.g., the balloon).
+         */
+        function burstConfetti(originElement) {
+            const rect = originElement.getBoundingClientRect();
+            const arena = document.getElementById('balloon-area');
+            if (!arena) return;
+
+            // Calculate center position relative to the arena
+            const arenaRect = arena.getBoundingClientRect();
+            const centerX = rect.left + (rect.width / 2) - arenaRect.left;
+            const centerY = rect.top + (rect.height / 2) - arenaRect.top;
+
+            const count = 30; // Number of confetti pieces
+            for (let i = 0; i < count; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+
+                // Random color
+                const color = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+                confetti.style.setProperty('--confetti-color', color);
+
+                // Start position
+                confetti.style.left = `${centerX}px`;
+                confetti.style.top = `${centerY}px`;
+
+                // Calculate random trajectories (explosion effect)
+                const angle = Math.random() * 360;
+                const distance = Math.random() * 150 + 50;
+                const xEnd = centerX + distance * Math.cos(angle * Math.PI / 180);
+                const yEnd = centerY + distance * Math.sin(angle * Math.PI / 180) + 100; // Gravity effect
+                
+                // Set CSS variables for animation
+                confetti.style.setProperty('--x-start', '0px');
+                confetti.style.setProperty('--y-start', '0px');
+                confetti.style.setProperty('--x-end', `${xEnd - centerX}px`);
+                confetti.style.setProperty('--y-end', `${yEnd - centerY}px`);
+                confetti.style.setProperty('--confetti-duration', `${Math.random() * 1.5 + 1.5}s`);
+
+                arena.appendChild(confetti);
+
+                // Remove confetti after animation finishes
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+        
+        function showMessageBox(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            modalOverlay.style.display = 'flex';
+            setTimeout(() => { document.getElementById('message-box').classList.add('show'); }, 10);
+        }
+
+        function closeMessageBox() {
+            document.getElementById('message-box').classList.remove('show');
+            setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
+        }
+
+        /**
+         * Handles the click action for the support buttons (copying placeholder to clipboard).
+         * @param {string} platformName - The name of the platform (e.g., 'PayPal').
+         * @param {string} placeholderContent - The content to be copied (e.g., 'https://paypal.me/yourusername').
+         */
+        function handleSupportAction(platformName, placeholderContent) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = placeholderContent;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                // Clipboard: For copying text to the clipboard, use document.execCommand('copy') as navigator.clipboard.writeText() may not work due to iFrame restrictions.
+                document.execCommand('copy'); 
+                // Determine if it's an ID/Address or a link for the message
+                const contentType = placeholderContent.includes('http') || placeholderContent.includes('//') ? 'Link' : 'Address/ID';
+                showMessageBox('Copied!', `The placeholder ${contentType} for ${platformName} was copied to your clipboard. Please replace this with your real ${contentType} in the HTML!`);
+            } catch (err) {
+                showMessageBox('Copy Failed', `Could not copy content.`);
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        function cleanupGame() {
+            // Preserve the heart flow interval, but clear game loops
+            const heartFlowInterval = currentGameIntervals.shift(); 
+            currentGameIntervals.forEach(clearInterval);
+            currentGameIntervals = [];
+            if (heartFlowInterval) currentGameIntervals.push(heartFlowInterval); // Re-add the heart flow interval
+
+            // Remove floating elements related to games (not the background heart flow)
+            document.querySelectorAll('#balloon-area .balloon, #bubble-pop-arena .bubble, .confetti').forEach(el => el.remove());
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // --- Game Selection, UI Setup, and Initialization ---
+
+        function startGame(gameName, clickedCard) {
+            document.querySelectorAll('.game-card').forEach(card => card.classList.remove('active-card'));
+            if (clickedCard) {
+                clickedCard.classList.add('active-card');
+            } else {
+                const defaultCard = document.querySelector(`.game-card[data-game="${gameName}"]`);
+                if (defaultCard) defaultCard.classList.add('active-card');
+            }
+            
+            // Scroll to the game area, addressing the user's implicit request to see the game
+            gameArea.scrollIntoView({ behavior: 'smooth' });
+
+            const levels = GAME_LEVELS[gameName];
+            if (levels) {
+                initializeGameWithLevel(gameName, 0); 
+            } else {
+                initializeGameWithLevel(gameName); 
+            }
+        }
+
+        function initializeGameWithLevel(gameName, levelIndex = null) {
+            // Re-run cleanup to ensure old game intervals are stopped
+            cleanupGame(); 
+            
+            activeGameName = gameName;
+
+            gameArea.innerHTML = `<h2 style="color:var(--color-primary); font-family:var(--font-title); margin-bottom: 20px;">${gameName}</h2>`;
+
+            const levels = GAME_LEVELS[gameName];
+            if (levels) {
+                const levelSelectDiv = document.createElement('div');
+                levelSelectDiv.className = 'level-select';
+                
+                if (levelIndex === null || levelIndex >= levels.length) levelIndex = 0;
+
+                levels.forEach((level, index) => {
+                    const btn = document.createElement('button');
+                    btn.textContent = level.name;
+                    btn.onclick = () => initializeGameWithLevel(gameName, index); 
+                    if (index === levelIndex) btn.classList.add('active');
+                    levelSelectDiv.appendChild(btn);
+                });
+                gameArea.appendChild(levelSelectDiv);
+            }
+
+            switch (gameName) {
+                case 'Heart Match Memory Game':
+                    initializeMemoryGame(levelIndex);
+                    break;
+                case 'Balloon Pop Game':
+                    initializeBalloonPopGame(levelIndex);
+                    break;
+                case 'Math Brainstorm':
+                    initializeMathBrainstorm();
+                    break;
+                case 'Color Mixing':
+                    initializeColorMixing();
+                    break;
+                case 'Bubble Pop Game':
+                    initializeBubblePopGame(levelIndex);
+                    break;
+            }
+        }
+
+        // --- 3. Heart Match Memory Game Logic ---
+
+        let mem_cards = [];
+        let mem_flippedCards = [];
+        let mem_matchesFound = 0;
+        let mem_lockBoard = false;
+        let mem_moves = 0;
+        let mem_currentLevel = 0;
+
+        function initializeMemoryGame(levelIndex) {
+            mem_currentLevel = levelIndex;
+            const config = GAME_LEVELS[activeGameName][levelIndex];
+            const iconSet = config.iconSet;
+            
+            mem_flippedCards = [];
+            mem_matchesFound = 0;
+            mem_moves = 0;
+            mem_lockBoard = false;
+
+            const doubledIcons = [...iconSet, ...iconSet];
+            mem_cards = shuffle(doubledIcons.map((icon, index) => ({ id: index, icon: icon, matched: false })));
+            
+            const numCols = config.cols; 
+            const cardSize = 80; 
+            const gap = 10;
+            const maxWidth = numCols * cardSize + (numCols - 1) * gap + 20; 
+
+            const gameContent = document.createElement('div');
+            gameContent.innerHTML = `
+                <p id="game-info" style="color:var(--color-text); font-weight:600;"></p>
+                <div id="memory-game-board" style="
+                    grid-template-columns: repeat(${numCols}, 1fr); 
+                    max-width: ${maxWidth}px; 
+                    width: 100%;
+                "></div>
+                <div class="game-controls"><button onclick="initializeGameWithLevel('Heart Match Memory Game', ${levelIndex})">Restart Level</button></div>
+            `;
+            gameArea.appendChild(gameContent);
+
+            updateMemoryGameInfo();
+
+            const board = document.getElementById('memory-game-board');
+            mem_cards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+                cardElement.dataset.icon = card.icon;
+                cardElement.dataset.index = index;
+
+                cardElement.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-face card-back"><i class="fas fa-question"></i></div>
+                        <div class="card-face card-front">${card.icon}</div>
+                    </div>
+                `;
+                cardElement.addEventListener('click', () => flipCard(cardElement));
+                board.appendChild(cardElement);
+            });
+        }
+        
+        function updateMemoryGameInfo() {
+            const infoElement = document.getElementById('game-info');
+            if (infoElement) {
+                const totalPairs = mem_cards.length / 2;
+                infoElement.textContent = `Level: ${GAME_LEVELS[activeGameName][mem_currentLevel].name} | Matches: ${mem_matchesFound}/${totalPairs} | Moves: ${mem_moves}`;
+            }
+        }
+
+        function flipCard(cardElement) {
+            if (mem_lockBoard || cardElement.classList.contains('flipped') || cardElement.classList.contains('matched')) return;
+
+            cardElement.classList.add('flipped');
+            mem_flippedCards.push(cardElement);
+
+            if (mem_flippedCards.length === 2) {
+                mem_moves++;
+                mem_lockBoard = true;
+                checkForMatch();
+            }
+            updateMemoryGameInfo();
+        }
+
+        function checkForMatch() {
+            const [card1, card2] = mem_flippedCards;
+            const isMatch = card1.dataset.icon === card2.dataset.icon;
+            const totalPairs = mem_cards.length / 2;
+
+            if (isMatch) {
+                mem_flippedCards.forEach(card => card.classList.add('matched'));
+                mem_matchesFound++;
+                if (mem_matchesFound === totalPairs) {
+                    setTimeout(() => {
+                        showMessageBox('Level Complete!', `You beat the ${GAME_LEVELS[activeGameName][mem_currentLevel].name} level in ${mem_moves} moves!`);
+                    }, 500);
+                }
+                resetBoard();
+            } else {
+                setTimeout(() => {
+                    mem_flippedCards.forEach(card => card.classList.remove('flipped'));
+                    resetBoard();
+                }, 1000);
+            }
+        }
+        function resetBoard() {
+            mem_flippedCards = [];
+            mem_lockBoard = false;
+        }
+
+
+        // --- 4. Balloon Pop Game Logic ---
+
+        let balloonScore = 0;
+        let balloonTimer = 0; 
+        let balloonGameActive = false;
+        let balloon_currentLevel = 0;
+
+        function initializeBalloonPopGame(levelIndex) {
+            balloon_currentLevel = levelIndex;
+            const config = GAME_LEVELS[activeGameName][levelIndex];
+
+            balloonScore = 0;
+            balloonTimer = config.time;
+            balloonGameActive = true;
+
+            const gameContent = document.createElement('div');
+            gameContent.innerHTML = `
+                <p id="balloon-score-info" style="color:var(--color-text); font-weight:600;"></p>
+                <div id="balloon-area" style="overflow: hidden;"></div>
+                <div class="game-controls">
+                    <button onclick="initializeGameWithLevel('Balloon Pop Game', ${levelIndex})">Restart Level</button>
+                </div>
+            `;
+            gameArea.appendChild(gameContent);
+            
+            const balloonArea = document.getElementById('balloon-area');
+
+            function updateBalloonInfo() {
+                document.getElementById('balloon-score-info').textContent = `Level: ${config.name} | Score: ${balloonScore} | Time: ${balloonTimer}s`;
+            }
+
+            function generateBalloon() {
+                if (!balloonGameActive) return;
+
+                const balloon = document.createElement('div');
+                balloon.classList.add('balloon');
+                
+                const arenaWidth = balloonArea.clientWidth; 
+
+                const size = Math.floor(Math.random() * 20) + 40; 
+                const randomX = Math.random() * (arenaWidth - size); 
+                
+                // Set animation speed (duration) and size
+                balloon.style.setProperty('--duration', `${config.duration + Math.random() * 1.5}s`);
+                balloon.style.setProperty('--size', `${size}px`);
+                balloon.style.left = `${randomX}px`;
+
+                balloon.onclick = (e) => {
+                    e.stopPropagation(); 
+                    
+                    if (balloon.classList.contains('popped')) return;
+
+                    balloonScore++;
+                    balloon.classList.add('popped');
+                    
+                    // Trigger confetti on pop
+                    burstConfetti(balloon);
+
+                    updateBalloonInfo();
+                    setTimeout(() => balloon.remove(), 300);
+                };
+
+                balloonArea.appendChild(balloon);
+                
+                // Add listener to remove balloons that float off the screen naturally
+                balloon.addEventListener('animationend', (event) => {
+                    if (event.animationName === 'ascend' && balloon.parentElement === balloonArea) {
+                        balloon.remove();
+                    }
+                });
+            }
+
+            // Start game loops
+            currentGameIntervals.push(setInterval(generateBalloon, config.interval));
+
+            const timerInterval = setInterval(() => {
+                balloonTimer--;
+                updateBalloonInfo();
+
+                if (balloonTimer <= 0) {
+                    balloonGameActive = false;
+                    
+                    // Stop the timer
+                    const index = currentGameIntervals.indexOf(timerInterval);
+                    if (index > -1) {
+                        clearInterval(currentGameIntervals.splice(index, 1)[0]);
+                    }
+                    
+                    showMessageBox("Time's Up!", `You popped ${balloonScore} balloons on the ${config.name} level!`);
+                    document.getElementById('balloon-area').innerHTML = `<h3 style="color:var(--color-primary);">Final Score: ${balloonScore}</h3><p>Select a level to play again!</p>`;
+                }
+            }, 1000);
+            currentGameIntervals.push(timerInterval);
+            updateBalloonInfo();
+        }
+        
+        // --- 5. Math Brainstorm Logic ---
+
+        let mathScore = 0;
+        let mathCorrectAnswer = 0;
+        let mathQuestionCount = 0;
+
+        function initializeMathBrainstorm() {
+            mathScore = 0;
+            mathQuestionCount = 0;
+            
+            const gameContent = document.createElement('div');
+            gameContent.innerHTML = `
+                <p id="math-score-info" style="color:var(--color-text); font-weight:600;">Score: 0 | Q: 0</p>
+                <div id="math-quiz">
+                    <div id="question-display" style="font-size: 1.5em; margin-bottom: 20px;">Loading...</div>
+                    <input type="number" id="answer-input" placeholder="Your Answer" required>
+                    <button class="game-controls" onclick="checkMathAnswer()">Submit</button>
+                    <p class="feedback" id="math-feedback" style="margin-top: 15px; font-weight: 600;"></p>
+                </div>
+            `;
+            gameArea.appendChild(gameContent);
+
+            generateNewMathQuestion();
+            document.getElementById('answer-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkMathAnswer();
+            });
+        }
+
+        function generateNewMathQuestion() {
+            const num1 = Math.floor(Math.random() * 20) + 1;
+            const num2 = Math.floor(Math.random() * 20) + 1;
+            const operation = Math.random() > 0.5 ? '+' : '-';
+            
+            let question = '';
+            if (operation === '-' && num1 < num2) {
+                question = `${num2} - ${num1} = ?`;
+                mathCorrectAnswer = num2 - num1;
+            } else if (operation === '-') {
+                question = `${num1} - ${num2} = ?`;
+                mathCorrectAnswer = num1 - num2;
+            } else {
+                question = `${num1} + ${num2} = ?`;
+                mathCorrectAnswer = num1 + num2;
+            }
+
+            document.getElementById('question-display').textContent = question;
+            document.getElementById('answer-input').value = '';
+            document.getElementById('math-feedback').textContent = '';
+            mathQuestionCount++;
+            document.getElementById('math-score-info').textContent = `Score: ${mathScore} | Q: ${mathQuestionCount - 1}`;
+        }
+
+        function checkMathAnswer() {
+            const answerInput = document.getElementById('answer-input');
+            const feedback = document.getElementById('math-feedback');
+            const userAnswer = parseInt(answerInput.value);
+
+            if (isNaN(userAnswer)) {
+                feedback.textContent = 'Please enter a number.';
+                feedback.style.color = 'red';
+                return;
+            }
+
+            if (userAnswer === mathCorrectAnswer) {
+                mathScore += 10;
+                feedback.textContent = 'Correct! 🎉';
+                feedback.style.color = 'green';
+            } else {
+                feedback.textContent = `Incorrect. The answer was ${mathCorrectAnswer}. 😔`;
+                feedback.style.color = 'red';
+            }
+            document.getElementById('math-score-info').textContent = `Score: ${mathScore} | Q: ${mathQuestionCount}`;
+
+            setTimeout(generateNewMathQuestion, 1000);
+        }
+        
+        // --- 6. Color Mixing Logic ---
+
+        function initializeColorMixing() {
+            const gameContent = document.createElement('div');
+            gameContent.innerHTML = `
+                <p style="color:var(--color-text); font-weight:400; max-width: 400px; text-align:center;">Mix your perfect color by adjusting the Red, Green, and Blue sliders.</p>
+                <div id="color-mixer" style="width: 100%; max-width: 450px; margin-top: 20px;">
+                    <div class="color-row" style="display:flex; align-items:center; gap:10px; margin-bottom: 10px;">
+                        <label style="color:#d32f2f; font-weight: 600; width: 30px;">R: <span id="r-val">0</span></label>
+                        <input type="range" id="red-slider" min="0" max="255" value="0" oninput="updateColor()" style="flex-grow: 1;">
+                    </div>
+                    <div class="color-row" style="display:flex; align-items:center; gap:10px; margin-bottom: 10px;">
+                        <label style="color:#388e3c; font-weight: 600; width: 30px;">G: <span id="g-val">0</span></label>
+                        <input type="range" id="green-slider" min="0" max="255" value="0" oninput="updateColor()" style="flex-grow: 1;">
+                    </div>
+                    <div class="color-row" style="display:flex; align-items:center; gap:10px; margin-bottom: 20px;">
+                        <label style="color:#1976d2; font-weight: 600; width: 30px;">B: <span id="b-val">0</span></label>
+                        <input type="range" id="blue-slider" min="0" max="255" value="0" oninput="updateColor()" style="flex-grow: 1;">
+                    </div>
+                    <div id="color-swatch" style="background-color: rgb(0, 0, 0); height: 100px; border-radius: var(--radius-sm); border: 1px solid #ccc;"></div>
+                    <p style="text-align:center; font-weight:600; margin-top:15px; color:var(--color-text);">RGB: <span id="rgb-code">rgb(0, 0, 0)</span></p>
+                </div>
+            `;
+            gameArea.appendChild(gameContent);
+            updateColor();
+        }
+        
+        function updateColor() {
+            const r = document.getElementById('red-slider')?.value || 0;
+            const g = document.getElementById('green-slider')?.value || 0;
+            const b = document.getElementById('blue-slider')?.value || 0;
+            
+            const rgbCode = `rgb(${r}, ${g}, ${b})`;
+
+            document.getElementById('r-val').textContent = r;
+            document.getElementById('g-val').textContent = g;
+            document.getElementById('b-val').textContent = b;
+            document.getElementById('rgb-code').textContent = rgbCode;
+            document.getElementById('color-swatch').style.backgroundColor = rgbCode;
+        }
+
+        // --- 7. Bubble Pop Game Logic ---
+        
+        let bubbleScore = 0;
+        let bubbleTimer = 0; 
+        let bubbleGameRunning = false;
+        let bubble_currentLevel = 0;
+
+        function initializeBubblePopGame(levelIndex) {
+            bubble_currentLevel = levelIndex;
+            const config = GAME_LEVELS[activeGameName][levelIndex];
+            
+            bubbleScore = 0;
+            bubbleTimer = config.time;
+            bubbleGameRunning = true;
+
+            const gameContent = document.createElement('div');
+            gameContent.innerHTML = `
+                <p id="bubble-score-info" style="color:var(--color-text); font-weight:600;"></p>
+                <div id="bubble-pop-arena" style="overflow: hidden;"></div>
+                <div class="game-controls">
+                    <button onclick="initializeGameWithLevel('Bubble Pop Game', ${levelIndex})">Restart Level</button>
+                </div>
+            `;
+            gameArea.appendChild(gameContent);
+
+            updateBubbleInfo();
+            
+            const arena = document.getElementById('bubble-pop-arena');
+
+            function updateBubbleInfo() {
+                document.getElementById('bubble-score-info').textContent = `Level: ${config.name} | Score: ${bubbleScore} | Time: ${bubbleTimer}s`;
+            }
+
+            function generateBubble() {
+                if (!bubbleGameRunning) return;
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+
+                const size = Math.floor(Math.random() * 20) + 35; // 35px to 55px
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+
+                const arenaRect = arena.getBoundingClientRect();
+                const xPos = Math.random() * (arena.clientWidth - size);
+                
+                // Set CSS variables for flow animation
+                bubble.style.setProperty('--duration', `${config.duration + Math.random() * 2}s`);
+                bubble.style.setProperty('--start-x', `${xPos}px`);
+                bubble.style.setProperty('--start-y', `${arena.clientHeight}px`); 
+                bubble.style.setProperty('--mid-x', `${xPos + (Math.random() > 0.5 ? 50 : -50)}px`);
+                bubble.style.setProperty('--end-x', `${Math.random() * (arena.clientWidth - size)}px`);
+
+                bubble.onclick = (e) => {
+                    e.stopPropagation();
+                    bubbleScore++;
+                    updateBubbleInfo();
+                    bubble.remove();
+                };
+
+                arena.appendChild(bubble);
+            }
+
+            // Game loops
+            const generationInterval = setInterval(generateBubble, config.interval);
+            currentGameIntervals.push(generationInterval);
+
+            const timerInterval = setInterval(() => {
+                bubbleTimer--;
+                updateBubbleInfo();
+
+                if (bubbleTimer <= 0) {
+                    bubbleGameRunning = false;
+                    
+                    // Stop the specific game intervals
+                    const indexG = currentGameIntervals.indexOf(generationInterval);
+                    if (indexG > -1) clearInterval(currentGameIntervals.splice(indexG, 1)[0]);
+                    const indexT = currentGameIntervals.indexOf(timerInterval);
+                    if (indexT > -1) clearInterval(currentGameIntervals.splice(indexT, 1)[0]);
+                    
+                    document.querySelectorAll('#bubble-pop-arena .bubble').forEach(el => el.remove());
+
+                    showMessageBox("Game Over!", `Your final score is ${bubbleScore} on the ${config.name} level!`);
+                    document.getElementById('bubble-pop-arena').innerHTML = `<h3 style="color:var(--color-primary);">Final Score: ${bubbleScore}</h3><p>Select a level to play again!</p>`;
+                }
+            }, 1000);
+            currentGameIntervals.push(timerInterval);
+        }
+
     </script>
-
-    <!-- Header -->
-    <h1>Welcome to Playful Games!</h1>
-
-    <!-- Game Cards Container -->
-    <div class="game-container">
-        <div class="game-card" onclick="alert('Concentration Game')">
-            <p>Concentration Game</p>
-        </div>
-        <div class="game-card" onclick="alert('Balloon Pop Game')">
-            <p>Balloon Pop Game</p>
-        </div>
-        <div class="game-card" onclick="alert('Math Brainstorm')">
-            <p>Math Brainstorm</p>
-        </div>
-        <div class="game-card" onclick="alert('Color Mixing')">
-            <p>Color Mixing</p>
-        </div>
-        <div class="game-card" onclick="alert('Bubble Pop Game')">
-            <p>Bubble Pop Game</p>
-        </div>
-    </div>
-
-    <!-- Donate Section -->
-    <div class="donate-section">
-        <h3>Enjoying the Games? Donate with Cryptocurrency!</h3>
-        <div class="crypto-buttons">
-            <button class="crypto-button">Trust Wallet</button>
-            <button class="crypto-button">Binance</button>
-            <button class="crypto-button">FaucetPay</button>
-            <button class="crypto-button">CWallet</button>
-            <button class="crypto-button">TON Wallet</button>
-        </div>
-      <!-- Footer -->
-      <footer class="text-center">
-        <p>&copy; 2025 Akshayaselvakumar. <a href="https://github.com/Akshayadeveloper"><i class="fab fa-github"></i></a> All Rights Reserved.</p>
-    </footer>
-    </div>
 </body>
 </html>
